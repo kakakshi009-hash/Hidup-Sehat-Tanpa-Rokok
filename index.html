@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kampanye Hidup Sehat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            font-weight: 500;
+        }
+        /* Navigasi */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 20;
+        }
+        .navbar .logo {
+            height: 30px;
+        }
+        .navbar .hamburger {
+            font-size: 2em;
+            cursor: pointer;
+            line-height: 0.5;
+            transition: transform 0.3s ease;
+        }
+        .navbar .hamburger:hover {
+            transform: scale(1.1);
+        }
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #0056b3;
+            list-style: none;
+            padding: 80px 0 0 0;
+            margin: 0;
+            box-shadow: -4px 0 8px rgba(0,0,0,0.3);
+            transition: right 0.3s ease-in-out;
+            z-index: 15;
+        }
+        .nav-menu.active {
+            right: 0;
+        }
+        .nav-menu li a {
+            display: block;
+            color: white;
+            padding: 15px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .nav-menu li a:hover {
+            background-color: #007bff;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .overlay.active {
+            display: block;
+        }
+        
+        /* Konten Halaman */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page {
+            display: none;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        /* Styling Halaman Home */
+        .hero-section {
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 1.2em;
+            color: #555;
+            font-style: italic;
+        }
+        .card {
+            background-color: #fff;
+            border: 2px solid #0056b3;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .card-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+            margin-top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card-image img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            position: static;
+        }
+        @media (min-width: 768px) {
+            .card {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+        
+        /* Styling Halaman Hidup Sehat */
+        .section {
+            background-color: #fff;
+            border: 2px solid #0056b3;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .section-image-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 15px auto;
+            position: relative;
+            padding-bottom: 100%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .section-image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .section h2 {
+            color: #0056b3;
+            font-size: 1.5em;
+            margin-top: 0;
+            transition: transform 0.3s ease;
+        }
+        .section h2:hover {
+            transform: translateX(5px);
+        }
+        .section p {
+            line-height: 1.6;
+            color: #333;
+        }
+        /* Styling Halaman Tentang Kami */
+        .about-content {
+            background-color: #fff;
+            border: 2px solid #0056b3;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .about-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        /* Styling Halaman Kontak */
+        .contact-container {
+            background-color: #fff;
+            border: 2px solid #0056b3;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .contact-item {
+            margin-bottom: 20px;
+        }
+        .contact-item i {
+            font-size: 2em;
+            margin-right: 10px;
+            color: #007bff;
+            transition: transform 0.3s ease;
+        }
+        .contact-item:hover i {
+            transform: scale(1.1);
+        }
+        .contact-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+            color: #0056b3;
+            transition: transform 0.3s ease;
+        }
+        .contact-item:hover h3 {
+            transform: translateX(5px);
+        }
+        .contact-item a {
+            color: #333;
+            text-decoration: none;
+        }
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="IMG-20250917-WA0009.jpg" alt="Logo Kesehatan" class="logo">
+        <div class="hamburger" id="nav-toggle">&#9776;</div>
+        <ul class="nav-menu" id="nav-menu">
+            <li><a href="#" class="nav-link" data-target="home-page">Home</a></li>
+            <li><a href="#" class="nav-link" data-target="hidup-sehat-page">Hidup Sehat Tanpa Rokok</a></li>
+            <li><a href="#" class="nav-link" data-target="tentang-kami-page">Tentang Kami</a></li>
+            <li><a href="#" class="nav-link" data-target="kontak-page">Kontak</a></li>
+        </ul>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+    
+    <div id="home-page" class="page active">
+        <section class="hero-section">
+            <h1>"Kampanye hidup sehat bebas rokok dan pencegahan penyakit akibat asap rokok"</h1>
+            <div class="card">
+                <div class="card-image">
+                    <img src="IMG-20250917-WA0083.jpg" alt="Ilustrasi">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="hidup-sehat-page" class="page">
+        <div class="section">
+            <div class="section-image-container">
+                <img src="IMG-20250917-WA0010.jpg" alt="Ilustrasi Bahaya Rokok">
+            </div>
+            <h2>1. Bahaya Rokok</h2>
+            <p>Rokok sangat berbahaya bagi kesehatan karena dapat merusak hampir seluruh organ tubuh, mulai dari paru-paru, jantung, hingga sistem reproduksi. Kebiasaan merokok meningkatkan risiko kanker paru, penyakit jantung koroner, stroke, bronkitis kronis, serta impotensi pada pria dan komplikasi kehamilan pada wanita. Lebih dari itu, asap rokok juga membahayakan orang lain yang tidak merokok (perokok pasif), terutama anak-anak dan ibu hamil, sehingga dampaknya meluas ke lingkungan sekitar.</p>
+        </div>
+        <div class="section">
+            <div class="section-image-container">
+                <img src="IMG-20250917-WA0011.jpg" alt="Ilustrasi Pencegahan Rokok">
+            </div>
+            <h2>2. Pencegahan Rokok</h2>
+            <p>Upaya pencegahan rokok dapat dilakukan dengan menciptakan lingkungan bebas rokok di sekolah, tempat kerja, transportasi umum, serta mengontrol iklan dan promosi rokok agar tidak menarik minat generasi muda. Dukungan keluarga, teman, dan masyarakat sangat penting untuk menguatkan perilaku hidup sehat, disertai pengalihan aktivitas ke olahraga, hobi, atau kegiatan positif lainnya. Selain itu, layanan konseling dan program berhenti merokok juga menjadi solusi bagi mereka yang sudah terlanjur kecanduan.</p>
+        </div>
+        <div class="section">
+            <div class="section-image-container">
+                <img src="IMG-20250917-WA0013.jpg" alt="Ilustrasi Edukasi Rokok">
+            </div>
+            <h2>3. Edukasi Rokok</h2>
+            <p>Edukasi tentang bahaya rokok perlu diberikan sejak dini agar masyarakat memahami risiko kesehatan yang ditimbulkannya. Sekolah dapat menjadi tempat efektif untuk kampanye bahaya rokok melalui pembelajaran dan kegiatan kreatif, sementara di masyarakat dapat dilakukan dengan penyuluhan, seminar, media sosial, hingga kampanye visual. Edukasi ini juga harus menyentuh generasi muda agar mereka tidak tergoda untuk mencoba rokok, karena kecanduan biasanya dimulai dari coba-coba.</p>
+        </div>
+        <div class="section">
+            <div class="section-image-container">
+                <img src="IMG-20250917-WA0012.jpg" alt="Ilustrasi Kandungan Rokok">
+            </div>
+            <h2>4. Kandungan Rokok</h2>
+            <p>Rokok mengandung lebih dari 7.000 zat kimia berbahaya, dengan ratusan zat beracun dan puluhan bersifat karsinogenik (pemicu kanker). Beberapa zat utama di dalamnya adalah nikotin yang menyebabkan kecanduan, tar yang merusak paru-paru, serta karbon monoksida yang mengurangi suplai oksigen dalam darah. Selain itu terdapat amonia, arsenik, formalin, hingga sianida yang biasa ditemukan dalam bahan kimia berbahaya, sehingga setiap hisapan rokok sebenarnya memasukkan racun berbahaya ke dalam tubuh.</p>
+        </div>
+    </div>
+    
+    <div id="tentang-kami-page" class="page">
+        <div class="page-content about-content">
+            <h2>Tentang Kami</h2>
+            <p>Selamat datang di sebuah gerakan kampanye kesehatan yang berfokus pada upaya menciptakan lingkungan sehat, bebas rokok, dan terbebas dari bahaya asap rokok. Kami hadir dengan semangat untuk memberikan edukasi, motivasi, dan dukungan kepada masyarakat agar lebih peduli pada kesehatan diri sendiri, keluarga, dan lingkungan sekitar.</p>
+            <p>Kami percaya bahwa hidup sehat dimulai dari langkah kecil: berani berkata tidak pada rokok. Melalui kampanye ini, kami mengajak semua kalangan – mulai dari remaja, orang tua, hingga komunitas – untuk bersama-sama mencegah dampak buruk rokok dan mengurangi risiko penyakit berbahaya seperti kanker, jantung, stroke, serta gangguan pernapasan.</p>
+            <p>Mari bergabung bersama kami dalam mewujudkan Indonesia yang lebih sehat, produktif, dan bebas asap rokok!</p>
+        </div>
+    </div>
+    
+    <div id="kontak-page" class="page">
+        <div class="page-content contact-container">
+            <h2>Kontak Kami</h2>
+            <div class="contact-item">
+                <h3><i class="fa-brands fa-whatsapp"></i> WhatsApp</h3>
+                <a href="https://wa.me/6281212724011" target="_blank">081212724011</a>
+            </div>
+            <div class="contact-item">
+                <h3><i class="fa-brands fa-instagram"></i> Instagram</h3>
+                <a href="https://www.instagram.com/Callesta_17" target="_blank">@Callesta_17</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const overlay = document.getElementById('overlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.dataset.target;
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const targetPage = document.getElementById(targetId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
